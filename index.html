@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vdom</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
+    <script src="./bst.js"></script>
+    <script src="./stack.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./vdom.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1 class="title">virtal dom</h1>
+        <div class="container">
+            <ul class="list">
+                <li class="item">item-1</li>
+                <li class="item">item-2</li>
+                <li class="item">item-3</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/html" id="tplTree2">
+    <div id="app">
+        <h1 class="title title--type2">virtal dom</h1>
+        <div class="container">
+            <ul class="list">
+                <li class="item">item-3</li>
+                <li class="item">item-1</li>
+                <li class="item">item-2</li>
+            </ul>
+        </div>
+    </div>
+</script>
+<script>
+    var lIndex = 0;
+    var rIndex = 0;
+
+    var bst = new BinarySearchTree();
+    var stack = new Stack();
+
+    domToBst(document.getElementById('app'), 0);
+
+    function domToBst(ele, key) {
+
+        if (stack.size() > 0) {
+            var curr1 = stack.pop();
+            domToBst(curr1, ++rIndex);
+        }
+
+        if (ele) {
+            var vnode = new VNode(ele.nodeType, ele.nodeName, ele.nodeValue, getOwnAttrs(ele));
+            bst.insert(key, vnode);
+            var curr;
+            if (ele.childNodes.length) {
+                curr = ele.childNodes[0];
+                domToBst(curr, --lIndex);
+            }
+            if (curr.nextSibling) stack.push(curr.nextSibling);
+        }
+        // if (stack.size() > 0) {
+        //     var curr1 = stack.pop();
+        //     // if (curr.nextSibling ) stack.push(curr.nextSibling);
+        //     domToBst(curr1, ++rIndex);
+        // }
+    }
+
+    // while (stack.size() > 0) {
+    //         var curr = stack.pop();
+    //         // if (curr.nextSibling ) stack.push(curr.nextSibling);
+    //         domToBst(curr, ++rIndex);
+    //     }
+
+    bst.inOrderTraverse(function (key, value) {
+        console.log(key, value);
+    });
+</script>
+
+</html>
