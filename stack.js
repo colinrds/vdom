@@ -40,6 +40,10 @@
         this.size = function () {
             return this.top;
         }
+
+        this.empty = function () {
+            return this.top === 0;
+        }
     }
 
     return Stack;

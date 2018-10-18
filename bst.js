@@ -25,6 +25,7 @@
             this.right = null;
             this.value = value;
         };
+        this.size = 0;
 
         var searchNode = function (node, key) {
             if (!node) {
@@ -41,7 +42,7 @@
             } else if (key >= node.key) {
                 searchNode(node.right, key);
             } else {
-                return true;
+                return node;
             }
         }
 
@@ -50,6 +51,7 @@
             var newNode = new Node(key, value);
 
             if (root === null) {
+                this.size++;
                 root = newNode;
             } else {
                 insertNode(root, newNode);
@@ -65,12 +67,14 @@
                 if (newNode.key < parentNode.key) {
                     if (!parentNode.left) {
                         parentNode.left = newNode;
+                        this.size++;
                     } else {
                         insertNode(parentNode.left, newNode);
                     }
                 } else {
                     if (!parentNode.right) {
                         parentNode.right = newNode;
+                        this.size++;
                     } else {
                         insertNode(parentNode.right, newNode);
                     }
@@ -90,7 +94,7 @@
             function inOrderTraverse(node, callback) {
                 if (node !== null) {
                     inOrderTraverse(node.left, callback);
-                    callback(node.key);
+                    callback(node.key, node);
                     inOrderTraverse(node.right, callback);
                 }
             }
